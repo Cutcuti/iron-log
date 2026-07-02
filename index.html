@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="apple-mobile-web-app-title" content="IRON LOG" />
+<meta name="theme-color" content="#0d0d0d" />
+<title>IRON LOG</title>
+<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22IRON%20LOG%22%2C%22short_name%22%3A%22IRON%20LOG%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230d0d0d%22%2C%22theme_color%22%3A%22%230d0d0d%22%7D" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' fill='%230d0d0d'/%3E%3Ctext x='90' y='110' font-family='Arial Black,sans-serif' font-size='80' font-weight='900' fill='%2300e5ff' text-anchor='middle'%3EIL%3C/text%3E%3C/svg%3E" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { background: #0d0d0d; overscroll-behavior: none; }
+  #root { min-height: 100vh; min-height: 100dvh; }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #111; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+  .ex-row { transition: background 0.2s; }
+  .ex-row:active { background: #1a1a1a !important; }
+  .set-btn { transition: all 0.15s; cursor: pointer; border: none; }
+  .set-btn:active { transform: scale(0.92); }
+  .tab-btn { transition: all 0.2s; cursor: pointer; border: none; background: none; }
+  .circle-btn { cursor: pointer; transition: all 0.2s; }
+  .circle-btn:active { transform: scale(0.85); }
+  @keyframes prFlash { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  @keyframes slideUp { from{transform:translateY(100%);opacity:0} to{transform:translateY(0);opacity:1} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useCallback } = React;
+
+const DAYS = {
+  A: {
+    label: "Day A", subtitle: "Push + Legs", color: "#00e5ff", days: [1, 4],
+    exercises: [
+      { id: "a1", name: "Push-Ups + Jumping Jacks", type: "WU", sets: 2, reps: null },
+      { id: "a2", name: "Barbell Bench Press", type: "STR", sets: 3, reps: "8–10" },
+      { id: "a3", name: "Standing Overhead Press", type: "STR", sets: 3, reps: "8" },
+      { id: "a4", name: "Dumbbell Lateral Raise", type: "STR", sets: 3, reps: "12–15" },
+      { id: "a5", name: "Barbell Back Squat", type: "STR", sets: 3, reps: "6–8" },
+      { id: "a6", name: "Hanging Leg Raise", type: "CORE", sets: 2, reps: "10–15" },
+      { id: "a7", name: "Treadmill / Stairs", type: "CARDIO", sets: null, reps: "10 min" },
+    ],
+  },
+  B: {
+    label: "Day B", subtitle: "Pull + Hinge", color: "#69ff47", days: [2, 5],
+    exercises: [
+      { id: "b1", name: "Pull-Ups + Dead Hangs", type: "WU", sets: 2, reps: null },
+      { id: "b2", name: "Lat Pulldown", type: "STR", sets: 3, reps: "10–12" },
+      { id: "b3", name: "Seated Cable Row", type: "STR", sets: 3, reps: "10–12" },
+      { id: "b4", name: "Face Pulls", type: "STR", sets: 3, reps: "12–15" },
+      { id: "b5", name: "Barbell / EZ-Bar Curl", type: "STR", sets: 3, reps: "8–10" },
+      { id: "b6", name: "Lying / Seated Leg Curl", type: "STR", sets: 3, reps: "10–12" },
+      { id: "b7", name: "Cable Woodchopper", type: "CORE", sets: 2, reps: "12–15" },
+      { id: "b8", name: "Cycling / Incline Walk", type: "CARDIO", sets: null, reps: "10 min" },
+    ],
+  },
+  C: {
+    label: "Day C", subtitle: "Arms + HIIT", color: "#ff4757", days: [3, 6],
+    exercises: [
+      { id: "c1", name: "Runs + Stretches", type: "WU", sets: null, reps: "5 min" },
+      { id: "c2", name: "Skull Crushers / Cable Pushdown", type: "STR", sets: 3, reps: "10–12" },
+      { id: "c3", name: "Hammer Curl", type: "STR", sets: 3, reps: "10–12" },
+      { id: "c4", name: "Incline Dumbbell Press", type: "STR", sets: 3, reps: "10" },
+      { id: "c5", name: "Standing Calf Raise", type: "STR", sets: 3, reps: "12–15" },
+      { id: "c6", name: "Sprint Intervals / Battle Rope", type: "HIIT", sets: 5, reps: "20s on / 40s off" },
+    ],
+  },
+};
+
+const TYPE_COLORS = { WU: "#facc15", STR: "#a78bfa", CORE: "#fb923c", CARDIO: "#34d399", HIIT: "#f472b6" };
+const STORAGE_KEY = "gymlog_v5";
+
+function getTodayTab() {
+  const dow = new Date().getDay();
+  if (dow === 1 || dow === 4) return "A";
+  if (dow === 2 || dow === 5) return "B";
+  if (dow === 3 || dow === 6) return "C";
+  return "A";
+}
+
+function buildInitialState() {
+  const state = {};
+  for (const [dayKey, day] of Object.entries(DAYS)) {
+    state[dayKey] = {};
+    for (const ex of day.exercises) {
+      state[dayKey][ex.id] = { sets: Array(ex.sets || 1).fill(false), weight: "", notes: "", done: false };
+    }
+  }
+  return state;
+}
+
+function buildInitialPRs() {
+  const prs = {};
+  for (const day of Object.values(DAYS)) for (const ex of day.exercises) prs[ex.id] = 0;
+  return prs;
+}
+
+function GymTracker() {
+  const [activeTab, setActiveTab] = useState(getTodayTab());
+  const [sessionState, setSessionState] = useState(buildInitialState());
+  const [prs, setPrs] = useState(buildInitialPRs());
+  const [expandedId, setExpandedId] = useState(null);
+  const [sessionDone, setSessionDone] = useState(false);
+  const [bannerDismissed, setBannerDismissed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [newPRFlash, setNewPRFlash] = useState(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const saved = JSON.parse(raw);
+        if (saved.sessionState) setSessionState(saved.sessionState);
+        if (saved.prs) setPrs(saved.prs);
+        if (saved.bannerDismissed) setBannerDismissed(saved.bannerDismissed);
+      }
+    } catch (e) {}
+    setLoaded(true);
+  }, []);
+
+  const save = useCallback((ss, p, bd) => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ sessionState: ss, prs: p, bannerDismissed: bd })); } catch (e) {}
+  }, []);
+
+  useEffect(() => {
+    if (!loaded) return;
+    const dayData = sessionState[activeTab];
+    const exercises = DAYS[activeTab].exercises;
+    const allDone = exercises.every((ex) => dayData[ex.id]?.done);
+    if (allDone && exercises.length > 0) setSessionDone(true);
+  }, [sessionState, activeTab, loaded]);
+
+  const color = DAYS[activeTab].color;
+
+  function getProgress() {
+    const dayData = sessionState[activeTab];
+    const exs = DAYS[activeTab].exercises;
+    const done = exs.filter((ex) => dayData[ex.id]?.done).length;
+    return { done, total: exs.length };
+  }
+
+  function toggleSet(dayKey, exId, setIdx) {
+    setSessionState((prev) => {
+      const updated = { ...prev };
+      const exState = { ...updated[dayKey][exId] };
+      const sets = [...exState.sets];
+      sets[setIdx] = !sets[setIdx];
+      exState.sets = sets;
+      exState.done = sets.every(Boolean);
+      updated[dayKey] = { ...updated[dayKey], [exId]: exState };
+      save(updated, prs, bannerDismissed);
+      return updated;
+    });
+  }
+
+  function markAllDone(dayKey, exId) {
+    setSessionState((prev) => {
+      const updated = { ...prev };
+      const exState = { ...updated[dayKey][exId] };
+      const allDone = exState.done;
+      exState.sets = exState.sets.map(() => !allDone);
+      exState.done = !allDone;
+      updated[dayKey] = { ...updated[dayKey], [exId]: exState };
+      save(updated, prs, bannerDismissed);
+      return updated;
+    });
+  }
+
+  function updateWeight(dayKey, exId, val) {
+    setSessionState((prev) => {
+      const updated = { ...prev };
+      updated[dayKey] = { ...updated[dayKey], [exId]: { ...updated[dayKey][exId], weight: val } };
+      const numVal = parseFloat(val);
+      if (!isNaN(numVal) && numVal > 0) {
+        const currentPR = prs[exId] || 0;
+        if (numVal > currentPR) {
+          const newPRs = { ...prs, [exId]: numVal };
+          setPrs(newPRs);
+          setNewPRFlash(exId);
+          setTimeout(() => setNewPRFlash(null), 2000);
+          save(updated, newPRs, bannerDismissed);
+          return updated;
+        }
+      }
+      save(updated, prs, bannerDismissed);
+      return updated;
+    });
+  }
+
+  function updateNotes(dayKey, exId, val) {
+    setSessionState((prev) => {
+      const updated = { ...prev };
+      updated[dayKey] = { ...updated[dayKey], [exId]: { ...updated[dayKey][exId], notes: val } };
+      save(updated, prs, bannerDismissed);
+      return updated;
+    });
+  }
+
+  function resetDay() {
+    setSessionState((prev) => {
+      const updated = { ...prev };
+      const fresh = buildInitialState();
+      for (const ex of DAYS[activeTab].exercises) {
+        fresh[activeTab][ex.id].weight = prev[activeTab][ex.id].weight;
+        fresh[activeTab][ex.id].notes = prev[activeTab][ex.id].notes;
+      }
+      updated[activeTab] = fresh[activeTab];
+      setSessionDone(false);
+      save(updated, prs, bannerDismissed);
+      return updated;
+    });
+  }
+
+  function dismissBanner() { setBannerDismissed(true); save(sessionState, prs, true); }
+
+  if (!loaded) return (
+    <div style={{ background: "#0d0d0d", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ color: "#555", fontFamily: "monospace", fontSize: 14 }}>Loading...</div>
+    </div>
+  );
+
+  const { done, total } = getProgress();
+  const progressPct = total > 0 ? (done / total) * 100 : 0;
+
+  return (
+    <div style={{ background: "#0d0d0d", minHeight: "100vh", fontFamily: "'DM Mono', 'Courier New', monospace", color: "#e0e0e0", position: "relative", paddingBottom: bannerDismissed ? 16 : 72 }}>
+      <div style={{ padding: "20px 16px 0", borderBottom: "1px solid #1e1e1e", paddingTop: "max(20px, env(safe-area-inset-top))" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+          <div>
+            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, letterSpacing: 3, color: color, lineHeight: 1 }}>IRON LOG</div>
+            <div style={{ fontSize: 10, color: "#444", letterSpacing: 2, marginTop: 2 }}>
+              {new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "short" }).toUpperCase()}
+            </div>
+          </div>
+          <button onClick={resetDay} style={{ background: "transparent", border: "1px solid #2a2a2a", color: "#555", borderRadius: 6, padding: "6px 12px", fontSize: 11, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>RESET DAY</button>
+        </div>
+        <div style={{ display: "flex", gap: 4 }}>
+          {Object.entries(DAYS).map(([key, day]) => (
+            <button key={key} className="tab-btn" onClick={() => { setActiveTab(key); setSessionDone(false); setExpandedId(null); }}
+              style={{ flex: 1, padding: "10px 4px", borderRadius: "8px 8px 0 0", color: activeTab === key ? "#0d0d0d" : "#444", background: activeTab === key ? day.color : "#141414", fontFamily: "inherit", fontSize: 11, fontWeight: 500, letterSpacing: 1, borderBottom: activeTab === key ? `2px solid ${day.color}` : "2px solid #1e1e1e" }}>
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 16, letterSpacing: 2 }}>{day.label}</div>
+              <div style={{ fontSize: 9, opacity: 0.8, marginTop: 1 }}>{day.subtitle}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ padding: "12px 16px 8px", background: "#111" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+          <span style={{ fontSize: 10, color: "#555", letterSpacing: 1 }}>PROGRESS</span>
+          <span style={{ fontSize: 10, color: color, letterSpacing: 1 }}>{done}/{total}</span>
+        </div>
+        <div style={{ height: 3, background: "#1e1e1e", borderRadius: 2, overflow: "hidden" }}>
+          <div style={{ height: "100%", width: `${progressPct}%`, background: color, borderRadius: 2, transition: "width 0.4s cubic-bezier(0.4,0,0.2,1)", boxShadow: `0 0 8px ${color}88` }} />
+        </div>
+      </div>
+
+      <div style={{ padding: "8px 0" }}>
+        {DAYS[activeTab].exercises.map((ex) => {
+          const exState = sessionState[activeTab][ex.id];
+          const isExpanded = expandedId === ex.id;
+          const isPR = newPRFlash === ex.id;
+          const hasPR = prs[ex.id] > 0 && parseFloat(exState.weight) >= prs[ex.id];
+          const setsCount = ex.sets || 1;
+          return (
+            <div key={ex.id} style={{ borderBottom: "1px solid #161616" }}>
+              <div className="ex-row" style={{ display: "flex", alignItems: "center", padding: "12px 16px", background: exState.done ? "#111" : "transparent", gap: 12, cursor: "pointer" }} onClick={() => setExpandedId(isExpanded ? null : ex.id)}>
+                <div className="circle-btn" onClick={(e) => { e.stopPropagation(); markAllDone(activeTab, ex.id); }}
+                  style={{ width: 28, height: 28, borderRadius: "50%", border: `2px solid ${exState.done ? color : "#2e2e2e"}`, background: exState.done ? color : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: exState.done ? `0 0 10px ${color}66` : "none", transition: "all 0.2s" }}>
+                  {exState.done && (<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#0d0d0d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>)}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 13, fontWeight: 500, color: exState.done ? "#444" : "#ddd", textDecoration: exState.done ? "line-through" : "none", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", letterSpacing: 0.3, animation: isPR ? "prFlash 0.4s ease 3" : "none" }}>{ex.name}</div>
+                  <div style={{ display: "flex", gap: 6, marginTop: 3, alignItems: "center" }}>
+                    <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 3, background: `${TYPE_COLORS[ex.type]}22`, color: TYPE_COLORS[ex.type], letterSpacing: 1, fontWeight: 500 }}>{ex.type}</span>
+                    {ex.sets && <span style={{ fontSize: 10, color: "#444" }}>{ex.sets}×{ex.reps}</span>}
+                    {!ex.sets && ex.reps && <span style={{ fontSize: 10, color: "#444" }}>{ex.reps}</span>}
+                    {hasPR && (<span style={{ fontSize: 11, animation: isPR ? "pulse 0.3s ease 4" : "none" }}>🏆</span>)}
+                    {exState.notes && (<span style={{ fontSize: 10, color: "#444" }}>📝</span>)}
+                  </div>
+                </div>
+                {exState.weight && (<div style={{ fontSize: 12, color: color, letterSpacing: 0.5, flexShrink: 0 }}>{exState.weight}kg</div>)}
+                <div style={{ color: "#333", transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", fontSize: 12 }}>▾</div>
+              </div>
+              {isExpanded && (
+                <div style={{ padding: "0 16px 16px", background: "#0f0f0f", animation: "slideUp 0.15s ease" }}>
+                  {ex.sets && (
+                    <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                      {Array.from({ length: setsCount }).map((_, i) => (
+                        <button key={i} className="set-btn" onClick={() => toggleSet(activeTab, ex.id, i)}
+                          style={{ padding: "8px 0", width: 52, borderRadius: 8, fontSize: 11, fontFamily: "inherit", letterSpacing: 1, background: exState.sets[i] ? color : "#1a1a1a", color: exState.sets[i] ? "#0d0d0d" : "#555", border: `1px solid ${exState.sets[i] ? color : "#252525"}`, boxShadow: exState.sets[i] ? `0 0 8px ${color}44` : "none" }}>S{i + 1}</button>
+                      ))}
+                    </div>
+                  )}
+                  {(ex.type === "STR" || ex.type === "HIIT") && (
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <span style={{ fontSize: 10, color: "#444", letterSpacing: 1 }}>WEIGHT</span>
+                      <input type="number" inputMode="decimal" placeholder="0" value={exState.weight} onChange={(e) => updateWeight(activeTab, ex.id, e.target.value)} onClick={(e) => e.stopPropagation()}
+                        style={{ background: "#1a1a1a", border: `1px solid ${isPR ? color : "#252525"}`, borderRadius: 8, padding: "8px 12px", color: color, fontSize: 14, fontFamily: "inherit", width: 90, outline: "none", boxShadow: isPR ? `0 0 10px ${color}44` : "none", transition: "border 0.2s, box-shadow 0.2s" }} />
+                      <span style={{ fontSize: 11, color: "#444" }}>kg</span>
+                      {prs[ex.id] > 0 && (<span style={{ fontSize: 10, color: "#444", marginLeft: "auto" }}>PR: {prs[ex.id]}kg</span>)}
+                    </div>
+                  )}
+                  <div style={{ marginTop: 12 }}>
+                    <div style={{ fontSize: 10, color: "#444", letterSpacing: 1, marginBottom: 6 }}>NOTES</div>
+                    <textarea placeholder="e.g. felt heavy, switch grip next time..." value={exState.notes} onChange={(e) => updateNotes(activeTab, ex.id, e.target.value)} onClick={(e) => e.stopPropagation()} rows={2}
+                      style={{ width: "100%", background: "#1a1a1a", border: "1px solid #252525", borderRadius: 8, padding: "8px 10px", color: "#bbb", fontSize: 12, fontFamily: "inherit", outline: "none", resize: "vertical", lineHeight: 1.4 }} />
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {sessionDone && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(13,13,13,0.97)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", zIndex: 100, animation: "fadeIn 0.3s ease" }}>
+          <div style={{ fontSize: 72, marginBottom: 16, animation: "pulse 1s ease infinite" }}>🔥</div>
+          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 42, color: color, letterSpacing: 6, textAlign: "center", textShadow: `0 0 30px ${color}88` }}>SESSION<br/>DONE</div>
+          <div style={{ color: "#444", fontSize: 12, letterSpacing: 2, marginTop: 12 }}>{DAYS[activeTab].label} — {DAYS[activeTab].subtitle}</div>
+          <button onClick={() => setSessionDone(false)} style={{ marginTop: 40, background: color, border: "none", borderRadius: 12, padding: "14px 40px", color: "#0d0d0d", fontSize: 13, fontFamily: "inherit", fontWeight: 500, letterSpacing: 2, cursor: "pointer", boxShadow: `0 0 20px ${color}66` }}>CLOSE</button>
+        </div>
+      )}
+
+      {!bannerDismissed && (
+        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#141414", borderTop: "1px solid #1e1e1e", padding: "10px 16px", paddingBottom: "max(10px, env(safe-area-inset-bottom))", display: "flex", alignItems: "center", gap: 10, zIndex: 50, animation: "slideUp 0.3s ease" }}>
+          <span style={{ fontSize: 11, color: "#555", flex: 1, letterSpacing: 0.3 }}>📱 Share ↑ → Add to Home Screen</span>
+          <button onClick={dismissBanner} style={{ background: "transparent", border: "none", color: "#444", fontSize: 18, cursor: "pointer", padding: "0 4px", lineHeight: 1 }}>×</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<GymTracker />);
+</script>
+</body>
+</html>
