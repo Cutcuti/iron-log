@@ -44,37 +44,38 @@ const DAYS = {
   A: {
     label: "Day A", subtitle: "Push + Legs", color: "#00e5ff", days: [1, 4],
     exercises: [
-      { id: "a1", name: "Push-Ups + Jumping Jacks", type: "WU", sets: 2, reps: null },
+      { id: "a1", name: "Push-Ups + Pull-Ups", type: "WU", sets: 2, reps: null },
       { id: "a2", name: "Barbell Bench Press", type: "STR", sets: 3, reps: "8–10" },
       { id: "a3", name: "Standing Overhead Press", type: "STR", sets: 3, reps: "8" },
       { id: "a4", name: "Dumbbell Lateral Raise", type: "STR", sets: 3, reps: "12–15" },
       { id: "a5", name: "Barbell Back Squat", type: "STR", sets: 3, reps: "6–8" },
       { id: "a6", name: "Hanging Leg Raise", type: "CORE", sets: 2, reps: "10–15" },
-      { id: "a7", name: "Treadmill / Stairs", type: "CARDIO", sets: null, reps: "10 min" },
+      { id: "a7", name: "Incline Walk (Zone 2–3)", type: "CARDIO", sets: null, reps: "30 min" },
     ],
   },
   B: {
     label: "Day B", subtitle: "Pull + Hinge", color: "#69ff47", days: [2, 5],
     exercises: [
-      { id: "b1", name: "Pull-Ups + Dead Hangs", type: "WU", sets: 2, reps: null },
+      { id: "b1", name: "Push-Ups + Pull-Ups", type: "WU", sets: 2, reps: null },
       { id: "b2", name: "Lat Pulldown", type: "STR", sets: 3, reps: "10–12" },
       { id: "b3", name: "Seated Cable Row", type: "STR", sets: 3, reps: "10–12" },
       { id: "b4", name: "Face Pulls", type: "STR", sets: 3, reps: "12–15" },
       { id: "b5", name: "Barbell / EZ-Bar Curl", type: "STR", sets: 3, reps: "8–10" },
       { id: "b6", name: "Lying / Seated Leg Curl", type: "STR", sets: 3, reps: "10–12" },
       { id: "b7", name: "Cable Woodchopper", type: "CORE", sets: 2, reps: "12–15" },
-      { id: "b8", name: "Cycling / Incline Walk", type: "CARDIO", sets: null, reps: "10 min" },
+      { id: "b8", name: "Incline Walk (Zone 2–3)", type: "CARDIO", sets: null, reps: "30 min" },
     ],
   },
   C: {
     label: "Day C", subtitle: "Arms + HIIT", color: "#ff4757", days: [3, 6],
     exercises: [
-      { id: "c1", name: "Runs + Stretches", type: "WU", sets: null, reps: "5 min" },
+      { id: "c1", name: "Push-Ups + Pull-Ups", type: "WU", sets: 2, reps: null },
       { id: "c2", name: "Skull Crushers / Cable Pushdown", type: "STR", sets: 3, reps: "10–12" },
       { id: "c3", name: "Hammer Curl", type: "STR", sets: 3, reps: "10–12" },
       { id: "c4", name: "Incline Dumbbell Press", type: "STR", sets: 3, reps: "10" },
       { id: "c5", name: "Standing Calf Raise", type: "STR", sets: 3, reps: "12–15" },
       { id: "c6", name: "Sprint Intervals / Battle Rope", type: "HIIT", sets: 5, reps: "20s on / 40s off" },
+      { id: "c7", name: "Incline Walk (Zone 2–3)", type: "CARDIO", sets: null, reps: "30 min" },
     ],
   },
 };
@@ -122,7 +123,17 @@ function GymTracker() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const saved = JSON.parse(raw);
-        if (saved.sessionState) setSessionState(saved.sessionState);
+        if (saved.sessionState) {
+          const merged = buildInitialState();
+          for (const dayKey of Object.keys(merged)) {
+            for (const exId of Object.keys(merged[dayKey])) {
+              if (saved.sessionState[dayKey]?.[exId]) {
+                merged[dayKey][exId] = saved.sessionState[dayKey][exId];
+              }
+            }
+          }
+          setSessionState(merged);
+        }
         if (saved.prs) setPrs(saved.prs);
         if (saved.bannerDismissed) setBannerDismissed(saved.bannerDismissed);
       }
@@ -195,6 +206,14 @@ function GymTracker() {
         }
       }
       save(updated, prs, bannerDismissed);
+      return updated;
+    });
+  }
+
+  function clearPR(exId) {
+    setPrs((prev) => {
+      const updated = { ...prev, [exId]: 0 };
+      save(sessionState, updated, bannerDismissed);
       return updated;
     });
   }
@@ -310,7 +329,12 @@ function GymTracker() {
                       <input type="number" inputMode="decimal" placeholder="0" value={exState.weight} onChange={(e) => updateWeight(activeTab, ex.id, e.target.value)} onClick={(e) => e.stopPropagation()}
                         style={{ background: "#1a1a1a", border: `1px solid ${isPR ? color : "#252525"}`, borderRadius: 8, padding: "8px 12px", color: color, fontSize: 14, fontFamily: "inherit", width: 90, outline: "none", boxShadow: isPR ? `0 0 10px ${color}44` : "none", transition: "border 0.2s, box-shadow 0.2s" }} />
                       <span style={{ fontSize: 11, color: "#444" }}>kg</span>
-                      {prs[ex.id] > 0 && (<span style={{ fontSize: 10, color: "#444", marginLeft: "auto" }}>PR: {prs[ex.id]}kg</span>)}
+                      {prs[ex.id] > 0 && (
+                        <span style={{ fontSize: 10, color: "#444", marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
+                          PR: {prs[ex.id]}kg
+                          <span onClick={(e) => { e.stopPropagation(); clearPR(ex.id); }} style={{ color: "#663333", textDecoration: "underline", cursor: "pointer" }}>CLEAR</span>
+                        </span>
+                      )}
                     </div>
                   )}
                   <div style={{ marginTop: 12 }}>
