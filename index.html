@@ -42,7 +42,7 @@ const { useState, useEffect, useCallback } = React;
 
 const DAYS = {
   A: {
-    label: "Day 1", subtitle: "Push — Chest, Shoulders, Triceps", color: "#00e5ff",
+    label: "Day 1", short: "Push", subtitle: "Push — Chest, Shoulders, Triceps", color: "#00e5ff",
     exercises: [
       { id: "p1", name: "Flat Bench Press", type: "STR", sets: 4, reps: "8–12" },
       { id: "p2", name: "Incline Dumbbell Press", type: "STR", sets: 3, reps: "10–12" },
@@ -54,7 +54,7 @@ const DAYS = {
     ],
   },
   B: {
-    label: "Day 2", subtitle: "Pull — Back, Biceps, Rear Delts", color: "#69ff47",
+    label: "Day 2", short: "Pull", subtitle: "Pull — Back, Biceps, Rear Delts", color: "#69ff47",
     exercises: [
       { id: "u1", name: "Lat Pulldown", type: "STR", sets: 4, reps: "6–10" },
       { id: "u2", name: "Seated Cable Row", type: "STR", sets: 4, reps: "8–12" },
@@ -66,7 +66,7 @@ const DAYS = {
     ],
   },
   C: {
-    label: "Day 3", subtitle: "Legs", color: "#ff4757",
+    label: "Day 3", short: "Legs", subtitle: "Legs", color: "#ff4757",
     exercises: [
       { id: "l1", name: "Barbell Squat", type: "STR", sets: 4, reps: "8–12" },
       { id: "l2", name: "Romanian Deadlifts", type: "STR", sets: 4, reps: "10–12" },
@@ -301,10 +301,14 @@ function GymTracker() {
             <button key={key} className="tab-btn" onClick={() => { setActiveTab(key); setSessionDone(false); setExpandedId(null); }}
               style={{ flex: 1, padding: "10px 4px", borderRadius: "8px 8px 0 0", color: activeTab === key ? "#0d0d0d" : "#444", background: activeTab === key ? day.color : "#141414", fontFamily: "inherit", fontSize: 11, fontWeight: 500, letterSpacing: 1, borderBottom: activeTab === key ? `2px solid ${day.color}` : "2px solid #1e1e1e" }}>
               <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 16, letterSpacing: 2 }}>{day.label}</div>
-              <div style={{ fontSize: 9, opacity: 0.8, marginTop: 1 }}>{day.subtitle}</div>
+              <div style={{ fontSize: 10, opacity: 0.85, marginTop: 1 }}>{day.short}</div>
             </button>
           ))}
         </div>
+      </div>
+
+      <div style={{ padding: "8px 16px", background: "#111", borderBottom: "1px solid #1e1e1e" }}>
+        <span style={{ fontSize: 11, color: color, letterSpacing: 0.5 }}>{DAYS[activeTab].subtitle}</span>
       </div>
 
       <div style={{ padding: "12px 16px 8px", background: "#111" }}>
