@@ -42,54 +42,46 @@ const { useState, useEffect, useCallback } = React;
 
 const DAYS = {
   A: {
-    label: "Day A", subtitle: "Push + Legs", color: "#00e5ff", days: [1, 4],
+    label: "Day 1", subtitle: "Push — Chest, Shoulders, Triceps", color: "#00e5ff",
     exercises: [
-      { id: "a1", name: "Stretches + Push-Ups + Pull-Ups", type: "WU", sets: 2, reps: null },
-      { id: "a2", name: "Barbell Bench Press", type: "STR", sets: 3, reps: "8–10" },
-      { id: "a3", name: "Standing Overhead Press", type: "STR", sets: 3, reps: "8" },
-      { id: "a4", name: "Dumbbell Lateral Raise", type: "STR", sets: 3, reps: "12–15" },
-      { id: "a5", name: "Barbell Back Squat", type: "STR", sets: 3, reps: "6–8" },
-      { id: "a6", name: "Hanging Leg Raise", type: "CORE", sets: 2, reps: "10–15" },
-      { id: "a7", name: "Incline Walk (Zone 2–3)", type: "CARDIO", sets: null, reps: "30 min" },
+      { id: "p1", name: "Flat Bench Press", type: "STR", sets: 4, reps: "8–12" },
+      { id: "p2", name: "Incline Dumbbell Press", type: "STR", sets: 3, reps: "10–12" },
+      { id: "p3", name: "Overhead Shoulder Press", type: "STR", sets: 4, reps: "8–10" },
+      { id: "p4", name: "Lateral Raises", type: "STR", sets: 3, reps: "12–15" },
+      { id: "p5", name: "Tricep Pushdown", type: "STR", sets: 3, reps: "12–15" },
+      { id: "p6", name: "Overhead Tricep Extension", type: "STR", sets: 3, reps: "10–12" },
+      { id: "p7", name: "Incline Treadmill Walk", type: "CARDIO", sets: null, reps: "20 min" },
     ],
   },
   B: {
-    label: "Day B", subtitle: "Pull + Hinge", color: "#69ff47", days: [2, 5],
+    label: "Day 2", subtitle: "Pull — Back, Biceps, Rear Delts", color: "#69ff47",
     exercises: [
-      { id: "b1", name: "Stretches + Push-Ups + Pull-Ups", type: "WU", sets: 2, reps: null },
-      { id: "b2", name: "Lat Pulldown", type: "STR", sets: 3, reps: "10–12" },
-      { id: "b3", name: "Seated Cable Row", type: "STR", sets: 3, reps: "10–12" },
-      { id: "b4", name: "Face Pulls", type: "STR", sets: 3, reps: "12–15" },
-      { id: "b5", name: "Barbell / EZ-Bar Curl", type: "STR", sets: 3, reps: "8–10" },
-      { id: "b6", name: "Lying / Seated Leg Curl", type: "STR", sets: 3, reps: "10–12" },
-      { id: "b7", name: "Cable Woodchopper", type: "CORE", sets: 2, reps: "12–15" },
-      { id: "b8", name: "Incline Walk (Zone 2–3)", type: "CARDIO", sets: null, reps: "30 min" },
+      { id: "u1", name: "Lat Pulldown", type: "STR", sets: 4, reps: "6–10" },
+      { id: "u2", name: "Seated Cable Row", type: "STR", sets: 4, reps: "8–12" },
+      { id: "u3", name: "Single-Arm Dumbbell Row", type: "STR", sets: 3, reps: "10–12" },
+      { id: "u4", name: "Face Pulls", type: "STR", sets: 3, reps: "12–15" },
+      { id: "u5", name: "Barbell Curl", type: "STR", sets: 3, reps: "10–12" },
+      { id: "u6", name: "Hammer Curls", type: "STR", sets: 3, reps: "10–12" },
+      { id: "u7", name: "Cycling", type: "CARDIO", sets: null, reps: "12–15 min" },
     ],
   },
   C: {
-    label: "Day C", subtitle: "Arms + HIIT", color: "#ff4757", days: [3, 6],
+    label: "Day 3", subtitle: "Legs", color: "#ff4757",
     exercises: [
-      { id: "c1", name: "Stretches + Push-Ups + Pull-Ups", type: "WU", sets: 2, reps: null },
-      { id: "c2", name: "Skull Crushers / Cable Pushdown", type: "STR", sets: 3, reps: "10–12" },
-      { id: "c3", name: "Hammer Curl", type: "STR", sets: 3, reps: "10–12" },
-      { id: "c4", name: "Incline Dumbbell Press", type: "STR", sets: 3, reps: "10" },
-      { id: "c5", name: "Standing Calf Raise", type: "STR", sets: 3, reps: "12–15" },
-      { id: "c6", name: "Sprint Intervals / Battle Rope", type: "HIIT", sets: 5, reps: "20s on / 40s off" },
-      { id: "c7", name: "Incline Walk (Zone 2–3)", type: "CARDIO", sets: null, reps: "30 min" },
+      { id: "l1", name: "Barbell Squat", type: "STR", sets: 4, reps: "8–12" },
+      { id: "l2", name: "Romanian Deadlifts", type: "STR", sets: 4, reps: "10–12" },
+      { id: "l3", name: "Leg Press", type: "STR", sets: 3, reps: "10–15" },
+      { id: "l4", name: "Leg Curls", type: "STR", sets: 3, reps: "10–12" },
+      { id: "l5", name: "Walking Lunges", type: "STR", sets: 3, reps: "12/leg" },
+      { id: "l6", name: "Calf Raises", type: "STR", sets: 4, reps: "15–20" },
+      { id: "l7", name: "Normal Walking", type: "CARDIO", sets: null, reps: "5 min" },
     ],
   },
 };
 
-const TYPE_COLORS = { WU: "#facc15", STR: "#a78bfa", CORE: "#fb923c", CARDIO: "#34d399", HIIT: "#f472b6" };
+const TYPE_COLORS = { STR: "#a78bfa", CARDIO: "#34d399" };
 const STORAGE_KEY = "gymlog_v5";
-
-function getTodayTab() {
-  const dow = new Date().getDay();
-  if (dow === 1 || dow === 4) return "A";
-  if (dow === 2 || dow === 5) return "B";
-  if (dow === 3 || dow === 6) return "C";
-  return "A";
-}
+const DEFAULT_TAB = "A";
 
 function buildInitialState() {
   const state = {};
@@ -109,7 +101,7 @@ function buildInitialPRs() {
 }
 
 function GymTracker() {
-  const [activeTab, setActiveTab] = useState(getTodayTab());
+  const [activeTab, setActiveTab] = useState(DEFAULT_TAB);
   const [sessionState, setSessionState] = useState(buildInitialState());
   const [prs, setPrs] = useState(buildInitialPRs());
   const [expandedId, setExpandedId] = useState(null);
@@ -136,14 +128,29 @@ function GymTracker() {
         }
         if (saved.prs) setPrs(saved.prs);
         if (saved.bannerDismissed) setBannerDismissed(saved.bannerDismissed);
+        if (saved.activeTab && DAYS[saved.activeTab]) setActiveTab(saved.activeTab);
       }
     } catch (e) {}
     setLoaded(true);
   }, []);
 
   const save = useCallback((ss, p, bd) => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ sessionState: ss, prs: p, bannerDismissed: bd })); } catch (e) {}
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const prevActiveTab = raw ? JSON.parse(raw).activeTab : undefined;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ sessionState: ss, prs: p, bannerDismissed: bd, activeTab: prevActiveTab }));
+    } catch (e) {}
   }, []);
+
+  useEffect(() => {
+    if (!loaded) return;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : {};
+      parsed.activeTab = activeTab;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+    } catch (e) {}
+  }, [activeTab, loaded]);
 
   useEffect(() => {
     if (!loaded) return;
@@ -323,7 +330,7 @@ function GymTracker() {
                       ))}
                     </div>
                   )}
-                  {(ex.type === "STR" || ex.type === "HIIT") && (
+                  {ex.type === "STR" && (
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <span style={{ fontSize: 10, color: "#444", letterSpacing: 1 }}>WEIGHT</span>
                       <input type="number" inputMode="decimal" placeholder="0" value={exState.weight} onChange={(e) => updateWeight(activeTab, ex.id, e.target.value)} onClick={(e) => e.stopPropagation()}
