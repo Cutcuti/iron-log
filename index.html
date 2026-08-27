@@ -83,319 +83,29 @@ const TYPE_COLORS = { STR: "#a78bfa", CARDIO: "#34d399" };
 const STORAGE_KEY = "gymlog_v5";
 const DEFAULT_TAB = "A";
 
-function Dumbbell({ x, y, angle = 0, r = 7 }) {
-  return (
-    <g transform={`translate(${x} ${y}) rotate(${angle})`}>
-      <line x1={-r} y1="0" x2={r} y2="0" />
-      <circle cx={-r} cy="0" r="3.5" fill="currentColor" />
-      <circle cx={r} cy="0" r="3.5" fill="currentColor" />
-    </g>
-  );
-}
-
-function Barbell({ x1, y1, x2, y2 }) {
-  return (
-    <g>
-      <line x1={x1} y1={y1} x2={x2} y2={y2} />
-      <circle cx={x1} cy={y1} r="4.5" fill="currentColor" />
-      <circle cx={x2} cy={y2} r="4.5" fill="currentColor" />
-    </g>
-  );
-}
-
-function ExerciseIcon({ id, size = 48 }) {
-  const s = { width: size, height: size, viewBox: "0 0 64 64", fill: "none", stroke: "currentColor", strokeWidth: 4, strokeLinecap: "round", strokeLinejoin: "round" };
-  switch (id) {
-    case "p1": // Flat Bench Press
-      return (
-        <svg {...s}>
-          <line x1="12" y1="46" x2="44" y2="46" />
-          <line x1="16" y1="46" x2="16" y2="54" />
-          <line x1="40" y1="46" x2="40" y2="54" />
-          <circle cx="15" cy="39" r="5" />
-          <line x1="20" y1="41" x2="36" y2="43" />
-          <line x1="36" y1="43" x2="42" y2="36" />
-          <line x1="42" y1="36" x2="37" y2="28" />
-          <line x1="23" y1="41" x2="23" y2="20" />
-          <Barbell x1="10" y1="20" x2="36" y2="20" />
-        </svg>
-      );
-    case "p2": // Incline Dumbbell Press
-      return (
-        <svg {...s}>
-          <line x1="14" y1="50" x2="26" y2="22" />
-          <line x1="14" y1="50" x2="44" y2="50" />
-          <circle cx="24" cy="17" r="5" />
-          <line x1="24" y1="22" x2="18" y2="42" />
-          <line x1="18" y1="42" x2="28" y2="58" />
-          <line x1="18" y1="42" x2="12" y2="58" />
-          <line x1="22" y1="26" x2="34" y2="10" />
-          <line x1="22" y1="26" x2="42" y2="20" />
-          <Dumbbell x={34} y={9} angle={-20} />
-          <Dumbbell x={43} y={19} angle={20} />
-        </svg>
-      );
-    case "p3": // Overhead Shoulder Press
-      return (
-        <svg {...s}>
-          <circle cx="32" cy="13" r="5" />
-          <line x1="32" y1="18" x2="32" y2="38" />
-          <line x1="32" y1="38" x2="26" y2="58" />
-          <line x1="32" y1="38" x2="38" y2="58" />
-          <line x1="30" y1="20" x2="16" y2="8" />
-          <line x1="34" y1="20" x2="48" y2="8" />
-          <Barbell x1="16" y1="8" x2="48" y2="8" />
-        </svg>
-      );
-    case "p4": // Lateral Raises
-      return (
-        <svg {...s}>
-          <circle cx="32" cy="13" r="5" />
-          <line x1="32" y1="18" x2="32" y2="38" />
-          <line x1="32" y1="38" x2="26" y2="58" />
-          <line x1="32" y1="38" x2="38" y2="58" />
-          <line x1="30" y1="21" x2="10" y2="21" />
-          <line x1="34" y1="21" x2="54" y2="21" />
-          <Dumbbell x={8} y={21} angle={0} />
-          <Dumbbell x={56} y={21} angle={0} />
-        </svg>
-      );
-    case "p5": // Tricep Pushdown
-      return (
-        <svg {...s}>
-          <circle cx="28" cy="13" r="5" />
-          <line x1="28" y1="18" x2="28" y2="38" />
-          <line x1="28" y1="38" x2="22" y2="58" />
-          <line x1="28" y1="38" x2="34" y2="58" />
-          <line x1="40" y1="3" x2="54" y2="3" />
-          <line x1="47" y1="3" x2="47" y2="24" />
-          <line x1="26" y1="20" x2="37" y2="26" />
-          <line x1="30" y1="20" x2="41" y2="26" />
-          <line x1="36" y1="27" x2="48" y2="25" />
-        </svg>
-      );
-    case "p6": // Overhead Tricep Extension
-      return (
-        <svg {...s}>
-          <circle cx="32" cy="13" r="5" />
-          <line x1="32" y1="18" x2="32" y2="38" />
-          <line x1="32" y1="38" x2="26" y2="58" />
-          <line x1="32" y1="38" x2="38" y2="58" />
-          <line x1="32" y1="20" x2="32" y2="8" />
-          <line x1="32" y1="8" x2="40" y2="14" />
-          <Dumbbell x={42} y={16} angle={60} />
-        </svg>
-      );
-    case "p7": // Incline Treadmill Walk
-      return (
-        <svg {...s}>
-          <line x1="8" y1="54" x2="50" y2="40" />
-          <circle cx="30" cy="28" r="5" />
-          <line x1="30" y1="33" x2="33" y2="46" />
-          <line x1="33" y1="46" x2="40" y2="50" />
-          <line x1="33" y1="46" x2="26" y2="54" />
-          <line x1="31" y1="36" x2="24" y2="40" />
-          <line x1="32" y1="36" x2="40" y2="32" />
-          <polyline points="46,18 52,22 46,26" />
-        </svg>
-      );
-    case "u1": // Lat Pulldown
-      return (
-        <svg {...s}>
-          <line x1="32" y1="2" x2="32" y2="6" />
-          <line x1="16" y1="6" x2="48" y2="6" />
-          <circle cx="16" cy="6" r="3" fill="currentColor" />
-          <circle cx="48" cy="6" r="3" fill="currentColor" />
-          <circle cx="32" cy="15" r="5" />
-          <line x1="32" y1="20" x2="32" y2="34" />
-          <line x1="32" y1="34" x2="42" y2="38" />
-          <line x1="42" y1="38" x2="42" y2="52" />
-          <line x1="28" y1="23" x2="18" y2="8" />
-          <line x1="36" y1="23" x2="46" y2="8" />
-        </svg>
-      );
-    case "u2": // Seated Cable Row
-      return (
-        <svg {...s}>
-          <line x1="12" y1="46" x2="24" y2="46" />
-          <line x1="46" y1="32" x2="46" y2="50" />
-          <circle cx="18" cy="22" r="5" />
-          <line x1="19" y1="27" x2="20" y2="46" />
-          <line x1="20" y1="46" x2="38" y2="48" />
-          <line x1="38" y1="48" x2="46" y2="42" />
-          <line x1="23" y1="31" x2="35" y2="34" />
-          <circle cx="35" cy="34" r="3" fill="currentColor" />
-          <line x1="35" y1="34" x2="46" y2="34" />
-        </svg>
-      );
-    case "u3": // Single-Arm Dumbbell Row
-      return (
-        <svg {...s}>
-          <line x1="10" y1="50" x2="30" y2="50" />
-          <circle cx="34" cy="24" r="5" />
-          <line x1="34" y1="29" x2="24" y2="44" />
-          <line x1="24" y1="44" x2="16" y2="50" />
-          <line x1="24" y1="44" x2="30" y2="58" />
-          <line x1="30" y1="32" x2="40" y2="44" />
-          <Dumbbell x={42} y={46} angle={90} />
-        </svg>
-      );
-    case "u4": // Face Pulls
-      return (
-        <svg {...s}>
-          <circle cx="32" cy="13" r="5" />
-          <line x1="32" y1="18" x2="32" y2="38" />
-          <line x1="32" y1="38" x2="26" y2="58" />
-          <line x1="32" y1="38" x2="38" y2="58" />
-          <line x1="29" y1="20" x2="14" y2="22" />
-          <line x1="14" y1="22" x2="24" y2="12" />
-          <line x1="35" y1="20" x2="50" y2="22" />
-          <line x1="50" y1="22" x2="40" y2="12" />
-          <line x1="24" y1="12" x2="32" y2="4" />
-          <line x1="40" y1="12" x2="32" y2="4" />
-        </svg>
-      );
-    case "u5": // Barbell Curl
-      return (
-        <svg {...s}>
-          <circle cx="32" cy="13" r="5" />
-          <line x1="32" y1="18" x2="32" y2="38" />
-          <line x1="32" y1="38" x2="26" y2="58" />
-          <line x1="32" y1="38" x2="38" y2="58" />
-          <line x1="28" y1="22" x2="24" y2="34" />
-          <line x1="36" y1="22" x2="40" y2="34" />
-          <line x1="24" y1="34" x2="29" y2="21" />
-          <line x1="40" y1="34" x2="35" y2="21" />
-          <Barbell x1="29" y1="20" x2="35" y2="20" />
-        </svg>
-      );
-    case "u6": // Hammer Curls
-      return (
-        <svg {...s}>
-          <circle cx="32" cy="13" r="5" />
-          <line x1="32" y1="18" x2="32" y2="38" />
-          <line x1="32" y1="38" x2="26" y2="58" />
-          <line x1="32" y1="38" x2="38" y2="58" />
-          <line x1="28" y1="22" x2="24" y2="34" />
-          <line x1="36" y1="22" x2="40" y2="34" />
-          <line x1="24" y1="34" x2="27" y2="26" />
-          <line x1="40" y1="34" x2="37" y2="26" />
-          <Dumbbell x={27} y={25} angle={90} />
-          <Dumbbell x={37} y={25} angle={90} />
-        </svg>
-      );
-    case "u7": // Cycling
-      return (
-        <svg {...s}>
-          <circle cx="14" cy="52" r="7" />
-          <circle cx="46" cy="52" r="7" />
-          <line x1="14" y1="52" x2="30" y2="38" />
-          <line x1="30" y1="38" x2="46" y2="52" />
-          <line x1="30" y1="38" x2="42" y2="42" />
-          <line x1="42" y1="42" x2="46" y2="38" />
-          <circle cx="28" cy="26" r="5" />
-          <line x1="28" y1="31" x2="32" y2="40" />
-          <line x1="30" y1="34" x2="42" y2="40" />
-          <line x1="32" y1="40" x2="38" y2="50" />
-          <circle cx="36" cy="52" r="2" fill="currentColor" />
-        </svg>
-      );
-    case "l1": // Barbell Squat
-      return (
-        <svg {...s}>
-          <circle cx="32" cy="12" r="5" />
-          <line x1="32" y1="17" x2="30" y2="34" />
-          <line x1="30" y1="34" x2="20" y2="44" />
-          <line x1="20" y1="44" x2="24" y2="58" />
-          <line x1="30" y1="34" x2="40" y2="44" />
-          <line x1="40" y1="44" x2="36" y2="58" />
-          <Barbell x1="14" y1="17" x2="50" y2="17" />
-        </svg>
-      );
-    case "l2": // Romanian Deadlifts
-      return (
-        <svg {...s}>
-          <circle cx="20" cy="20" r="5" />
-          <line x1="23" y1="24" x2="34" y2="38" />
-          <line x1="34" y1="38" x2="32" y2="58" />
-          <line x1="34" y1="38" x2="40" y2="58" />
-          <line x1="26" y1="29" x2="26" y2="46" />
-          <line x1="30" y1="32" x2="30" y2="46" />
-          <Barbell x1="20" y1="46" x2="36" y2="46" />
-        </svg>
-      );
-    case "l3": // Leg Press
-      return (
-        <svg {...s}>
-          <line x1="40" y1="10" x2="56" y2="42" />
-          <line x1="42" y1="14" x2="54" y2="20" />
-          <line x1="46" y1="20" x2="58" y2="26" />
-          <line x1="14" y1="44" x2="34" y2="20" />
-          <line x1="14" y1="44" x2="34" y2="44" />
-          <circle cx="16" cy="46" r="5" />
-          <line x1="19" y1="42" x2="30" y2="26" />
-          <line x1="28" y1="30" x2="46" y2="20" />
-        </svg>
-      );
-    case "l4": // Leg Curls
-      return (
-        <svg {...s}>
-          <line x1="10" y1="34" x2="40" y2="34" />
-          <line x1="14" y1="34" x2="14" y2="42" />
-          <line x1="36" y1="34" x2="36" y2="42" />
-          <circle cx="14" cy="28" r="5" />
-          <line x1="19" y1="30" x2="36" y2="32" />
-          <line x1="36" y1="32" x2="42" y2="34" />
-          <line x1="42" y1="34" x2="46" y2="18" />
-          <circle cx="46" cy="17" r="3" fill="currentColor" />
-        </svg>
-      );
-    case "l5": // Walking Lunges
-      return (
-        <svg {...s}>
-          <circle cx="30" cy="14" r="5" />
-          <line x1="30" y1="19" x2="30" y2="34" />
-          <line x1="30" y1="34" x2="22" y2="42" />
-          <line x1="22" y1="42" x2="24" y2="56" />
-          <line x1="30" y1="34" x2="38" y2="44" />
-          <line x1="38" y1="44" x2="36" y2="56" />
-          <line x1="28" y1="22" x2="24" y2="30" />
-          <line x1="32" y1="22" x2="36" y2="30" />
-        </svg>
-      );
-    case "l6": // Calf Raises
-      return (
-        <svg {...s}>
-          <line x1="18" y1="58" x2="46" y2="58" />
-          <circle cx="32" cy="14" r="5" />
-          <line x1="32" y1="19" x2="32" y2="38" />
-          <line x1="32" y1="38" x2="27" y2="54" />
-          <line x1="27" y1="54" x2="27" y2="58" />
-          <line x1="32" y1="38" x2="37" y2="54" />
-          <line x1="37" y1="54" x2="37" y2="58" />
-          <polyline points="46,50 46,42 42,46" />
-        </svg>
-      );
-    case "l7": // Normal Walking
-      return (
-        <svg {...s}>
-          <line x1="10" y1="58" x2="54" y2="58" />
-          <circle cx="28" cy="26" r="5" />
-          <line x1="28" y1="31" x2="31" y2="44" />
-          <line x1="31" y1="44" x2="38" y2="50" />
-          <line x1="31" y1="44" x2="24" y2="54" />
-          <line x1="29" y1="34" x2="22" y2="38" />
-          <line x1="30" y1="34" x2="38" y2="30" />
-        </svg>
-      );
-    default:
-      return (
-        <svg {...s}>
-          <Dumbbell x={32} y={32} angle={0} r={14} />
-        </svg>
-      );
-  }
-}
+const EXERCISE_MEDIA = {
+  p1: "Images/Barbell-Bench-Press.gif",
+  p2: "Images/Incline-Dumbbell-Press.gif",
+  p3: "Images/Standing-Dumbbell-Overhead-Press.gif",
+  p4: "Images/Dumbbell-Lateral-Raise.gif",
+  p5: "Images/Tricep-pushdown.jpg",
+  p6: "Images/High-Pulley-Overhead-Tricep-Extension.gif",
+  p7: "Images/Incline-Treadmill.gif",
+  u1: "Images/Lat-Pulldown.gif",
+  u2: "Images/Seated-Cable-Row.gif",
+  u3: "Images/Dumbbell-Row.gif",
+  u4: "Images/Face-Pull.gif",
+  u5: "Images/Barbell-Curl.gif",
+  u6: "Images/Seated-Hammer-Curl.gif",
+  u7: "Images/Cycling.gif",
+  l1: "Images/BARBELL-SQUAT.gif",
+  l2: "Images/Barbell-Romanian-Deadlift.gif",
+  l3: "Images/Leg-Press.gif",
+  l4: "Images/Seated-Leg-Curl.gif",
+  l5: "Images/bodyweight-lunges.gif",
+  l6: "Images/Calfraises.jpg",
+  l7: "Images/Treadmill-.gif",
+};
 
 function buildInitialState() {
   const state = {};
@@ -636,10 +346,14 @@ function GymTracker() {
               </div>
               {isExpanded && (
                 <div style={{ padding: "0 16px 16px", background: "#0f0f0f", animation: "slideUp 0.15s ease" }}>
-                  <div style={{ display: "flex", justifyContent: "center", padding: "8px 0 14px" }}>
-                    <div style={{ width: 84, height: 84, borderRadius: 14, background: `${color}12`, border: `1px solid ${color}33`, display: "flex", alignItems: "center", justifyContent: "center", color: color }}>
-                      <ExerciseIcon id={ex.id} size={56} />
-                    </div>
+                  <div style={{ padding: "8px 0 14px" }}>
+                    <img
+                      src={EXERCISE_MEDIA[ex.id]}
+                      alt={ex.name}
+                      loading="lazy"
+                      onError={(e) => { e.target.style.display = "none"; }}
+                      style={{ display: "block", width: "100%", height: 170, objectFit: "cover", borderRadius: 12, border: `1px solid ${color}33`, background: "#000" }}
+                    />
                   </div>
                   {ex.sets && (
                     <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
