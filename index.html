@@ -44,6 +44,7 @@ const DAYS = {
   A: {
     label: "Day 1", short: "Push", subtitle: "Push — Chest, Shoulders, Triceps", color: "#5AC8DE",
     exercises: [
+      { id: "p0", name: "Warm-Up", type: "WU", sets: 3, setLabels: ["Warmup", "Push-Ups", "Pull-Ups"], reps: null },
       { id: "p1", name: "Flat Bench Press", type: "STR", sets: 4, reps: "8–12" },
       { id: "p2", name: "Incline Dumbbell Press", type: "STR", sets: 3, reps: "10–12" },
       { id: "p3", name: "Overhead Shoulder Press", type: "STR", sets: 4, reps: "8–10" },
@@ -56,6 +57,7 @@ const DAYS = {
   B: {
     label: "Day 2", short: "Pull", subtitle: "Pull — Back, Biceps, Rear Delts", color: "#6FCF7C",
     exercises: [
+      { id: "u0", name: "Warm-Up", type: "WU", sets: 3, setLabels: ["Warmup", "Push-Ups", "Pull-Ups"], reps: null },
       { id: "u1", name: "Lat Pulldown", type: "STR", sets: 4, reps: "6–10" },
       { id: "u2", name: "Seated Cable Row", type: "STR", sets: 4, reps: "8–12" },
       { id: "u3", name: "Single-Arm Dumbbell Row", type: "STR", sets: 3, reps: "10–12" },
@@ -68,6 +70,7 @@ const DAYS = {
   C: {
     label: "Day 3", short: "Legs", subtitle: "Legs", color: "#E8636B",
     exercises: [
+      { id: "l0", name: "Warm-Up", type: "WU", sets: 3, setLabels: ["Warmup", "Push-Ups", "Pull-Ups"], reps: null },
       { id: "l1", name: "Barbell Squat", type: "STR", sets: 4, reps: "8–12" },
       { id: "l2", name: "Romanian Deadlifts", type: "STR", sets: 4, reps: "10–12" },
       { id: "l3", name: "Leg Press", type: "STR", sets: 3, reps: "10–15" },
@@ -79,7 +82,7 @@ const DAYS = {
   },
 };
 
-const TYPE_COLORS = { STR: "#a78bfa", CARDIO: "#34d399" };
+const TYPE_COLORS = { WU: "#D9A441", STR: "#a78bfa", CARDIO: "#34d399" };
 const STORAGE_KEY = "gymlog_v5";
 const DEFAULT_TAB = "A";
 
@@ -339,7 +342,7 @@ function GymTracker() {
                   <div style={{ fontSize: 13, fontWeight: 500, color: exState.done ? "#6B655B" : "#C7C1B8", textDecoration: exState.done ? "line-through" : "none", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", letterSpacing: 0.3, animation: isPR ? "prFlash 0.4s ease 3" : "none" }}>{ex.name}</div>
                   <div style={{ display: "flex", gap: 6, marginTop: 3, alignItems: "center" }}>
                     <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 3, background: `${TYPE_COLORS[ex.type]}22`, color: TYPE_COLORS[ex.type], letterSpacing: 1, fontWeight: 500 }}>{ex.type}</span>
-                    {ex.sets && <span style={{ fontSize: 10, color: "#6B655B" }}>{ex.sets}×{ex.reps}</span>}
+                    {ex.sets && ex.reps && <span style={{ fontSize: 10, color: "#6B655B" }}>{ex.sets}×{ex.reps}</span>}
                     {!ex.sets && ex.reps && <span style={{ fontSize: 10, color: "#6B655B" }}>{ex.reps}</span>}
                     {hasPR && (<span style={{ fontSize: 11, animation: isPR ? "pulse 0.3s ease 4" : "none" }}>🏆</span>)}
                     {exState.notes && (<span style={{ fontSize: 10, color: "#6B655B" }}>📝</span>)}
@@ -350,22 +353,24 @@ function GymTracker() {
               </div>
               {isExpanded && (
                 <div style={{ padding: "0 16px 16px", background: "#1D1C19", animation: "slideUp 0.15s ease" }}>
-                  <div style={{ padding: "8px 0 14px", display: "flex", justifyContent: "center" }}>
-                    <div style={{ width: "100%", maxWidth: 320, aspectRatio: "1", borderRadius: 12, overflow: "hidden", border: `1px solid ${color}33`, background: "#fff" }}>
-                      <img
-                        src={EXERCISE_MEDIA[ex.id]}
-                        alt={ex.name}
-                        loading="lazy"
-                        onError={(e) => { e.target.parentElement.style.display = "none"; }}
-                        style={{ display: "block", width: "100%", height: "100%", objectFit: "contain" }}
-                      />
+                  {EXERCISE_MEDIA[ex.id] && (
+                    <div style={{ padding: "8px 0 14px", display: "flex", justifyContent: "center" }}>
+                      <div style={{ width: "100%", maxWidth: 320, aspectRatio: "1", borderRadius: 12, overflow: "hidden", border: `1px solid ${color}33`, background: "#fff" }}>
+                        <img
+                          src={EXERCISE_MEDIA[ex.id]}
+                          alt={ex.name}
+                          loading="lazy"
+                          onError={(e) => { e.target.parentElement.style.display = "none"; }}
+                          style={{ display: "block", width: "100%", height: "100%", objectFit: "contain" }}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
                   {ex.sets && (
-                    <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                    <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap", paddingTop: EXERCISE_MEDIA[ex.id] ? 0 : 14 }}>
                       {Array.from({ length: setsCount }).map((_, i) => (
                         <button key={i} className="set-btn" onClick={() => toggleSet(activeTab, ex.id, i)}
-                          style={{ padding: "8px 0", width: 52, borderRadius: 8, fontSize: 11, fontFamily: "inherit", letterSpacing: 1, background: exState.sets[i] ? color : "#262420", color: exState.sets[i] ? "#1A1917" : "#7A7468", border: `1px solid ${exState.sets[i] ? color : "#3A3733"}` }}>S{i + 1}</button>
+                          style={{ padding: ex.setLabels ? "8px 14px" : "8px 0", width: ex.setLabels ? "auto" : 52, borderRadius: 8, fontSize: 11, fontFamily: "inherit", letterSpacing: 1, background: exState.sets[i] ? color : "#262420", color: exState.sets[i] ? "#1A1917" : "#7A7468", border: `1px solid ${exState.sets[i] ? color : "#3A3733"}` }}>{ex.setLabels ? ex.setLabels[i] : `S${i + 1}`}</button>
                       ))}
                     </div>
                   )}
