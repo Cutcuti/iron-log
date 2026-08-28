@@ -3,8 +3,8 @@
   "short_name": "IRON LOG",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#121214",
-  "theme_color": "#121214",
+  "background_color": "#1A1917",
+  "theme_color": "#1A1917",
   "icons": [
     {
       "src": "/apple-touch-icon.png",

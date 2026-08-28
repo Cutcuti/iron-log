@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <meta name="apple-mobile-web-app-title" content="IRON LOG" />
-<meta name="theme-color" content="#121214" />
+<meta name="theme-color" content="#1A1917" />
 <title>IRON LOG</title>
 <link rel="manifest" href="/manifest.json" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -14,13 +14,13 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html, body { background: #121214; overscroll-behavior: none; }
+  html, body { background: #1A1917; overscroll-behavior: none; }
   #root { min-height: 100vh; min-height: 100dvh; }
   ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: #111; }
-  ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+  ::-webkit-scrollbar-track { background: #201F1C; }
+  ::-webkit-scrollbar-thumb { background: #5A554C; border-radius: 2px; }
   .ex-row { transition: background 0.2s; }
-  .ex-row:active { background: #1a1a1a !important; }
+  .ex-row:active { background: #262420 !important; }
   .set-btn { transition: all 0.15s; cursor: pointer; border: none; }
   .set-btn:active { transform: scale(0.92); }
   .tab-btn { transition: all 0.2s; cursor: pointer; border: none; background: none; }
@@ -276,8 +276,8 @@ function GymTracker() {
   function dismissBanner() { setBannerDismissed(true); save(sessionState, prs, true); }
 
   if (!loaded) return (
-    <div style={{ background: "#121214", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ color: "#555", fontFamily: "monospace", fontSize: 14 }}>Loading...</div>
+    <div style={{ background: "#1A1917", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ color: "#7A7468", fontFamily: "monospace", fontSize: 14 }}>Loading...</div>
     </div>
   );
 
@@ -285,21 +285,21 @@ function GymTracker() {
   const progressPct = total > 0 ? (done / total) * 100 : 0;
 
   return (
-    <div style={{ background: "#121214", minHeight: "100vh", fontFamily: "'JetBrains Mono', 'Courier New', monospace", color: "#e0e0e0", position: "relative", paddingBottom: bannerDismissed ? 16 : 72 }}>
-      <div style={{ padding: "20px 16px 0", borderBottom: "1px solid #1e1e1e", paddingTop: "max(20px, env(safe-area-inset-top))" }}>
+    <div style={{ background: "#1A1917", minHeight: "100vh", fontFamily: "'JetBrains Mono', 'Courier New', monospace", color: "#C7C1B8", position: "relative", paddingBottom: bannerDismissed ? 16 : 72 }}>
+      <div style={{ padding: "20px 16px 0", borderBottom: "1px solid #322F2A", paddingTop: "max(20px, env(safe-area-inset-top))" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
           <div>
             <div style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 800, fontSize: 24, letterSpacing: 0.5, color: color, lineHeight: 1 }}>IRON LOG</div>
-            <div style={{ fontSize: 10, color: "#444", letterSpacing: 2, marginTop: 2 }}>
+            <div style={{ fontSize: 10, color: "#6B655B", letterSpacing: 2, marginTop: 2 }}>
               {new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "short" }).toUpperCase()}
             </div>
           </div>
-          <button onClick={resetDay} style={{ background: "transparent", border: "1px solid #2a2a2a", color: "#555", borderRadius: 6, padding: "6px 12px", fontSize: 11, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>RESET DAY</button>
+          <button onClick={resetDay} style={{ background: "transparent", border: "1px solid #3A3733", color: "#7A7468", borderRadius: 6, padding: "6px 12px", fontSize: 11, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>RESET DAY</button>
         </div>
         <div style={{ display: "flex", gap: 4 }}>
           {Object.entries(DAYS).map(([key, day]) => (
             <button key={key} className="tab-btn" onClick={() => { setActiveTab(key); setSessionDone(false); setExpandedId(null); }}
-              style={{ flex: 1, padding: "10px 4px", borderRadius: "8px 8px 0 0", color: activeTab === key ? "#121214" : "#444", background: activeTab === key ? day.color : "#141414", fontFamily: "inherit", fontSize: 11, fontWeight: 500, letterSpacing: 1, borderBottom: activeTab === key ? `2px solid ${day.color}` : "2px solid #1e1e1e" }}>
+              style={{ flex: 1, padding: "10px 4px", borderRadius: "8px 8px 0 0", color: activeTab === key ? "#1A1917" : "#6B655B", background: activeTab === key ? day.color : "#211F1C", fontFamily: "inherit", fontSize: 11, fontWeight: 500, letterSpacing: 1, borderBottom: activeTab === key ? `2px solid ${day.color}` : "2px solid #322F2A" }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, fontSize: 13, letterSpacing: 0.5 }}>{day.label}</div>
               <div style={{ fontSize: 10, opacity: 0.85, marginTop: 1 }}>{day.short}</div>
             </button>
@@ -307,16 +307,16 @@ function GymTracker() {
         </div>
       </div>
 
-      <div style={{ padding: "8px 16px", background: "#111", borderBottom: "1px solid #1e1e1e" }}>
+      <div style={{ padding: "8px 16px", background: "#201F1C", borderBottom: "1px solid #322F2A" }}>
         <span style={{ fontSize: 11, color: color, letterSpacing: 0.5 }}>{DAYS[activeTab].subtitle}</span>
       </div>
 
-      <div style={{ padding: "12px 16px 8px", background: "#111" }}>
+      <div style={{ padding: "12px 16px 8px", background: "#201F1C" }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-          <span style={{ fontSize: 10, color: "#555", letterSpacing: 1 }}>PROGRESS</span>
+          <span style={{ fontSize: 10, color: "#7A7468", letterSpacing: 1 }}>PROGRESS</span>
           <span style={{ fontSize: 10, color: color, letterSpacing: 1 }}>{done}/{total}</span>
         </div>
-        <div style={{ height: 3, background: "#1e1e1e", borderRadius: 2, overflow: "hidden" }}>
+        <div style={{ height: 3, background: "#322F2A", borderRadius: 2, overflow: "hidden" }}>
           <div style={{ height: "100%", width: `${progressPct}%`, background: color, borderRadius: 2, transition: "width 0.4s cubic-bezier(0.4,0,0.2,1)" }} />
         </div>
       </div>
@@ -329,27 +329,27 @@ function GymTracker() {
           const hasPR = prs[ex.id] > 0 && parseFloat(exState.weight) >= prs[ex.id];
           const setsCount = ex.sets || 1;
           return (
-            <div key={ex.id} style={{ borderBottom: "1px solid #161616" }}>
-              <div className="ex-row" style={{ display: "flex", alignItems: "center", padding: "12px 16px", background: exState.done ? "#111" : "transparent", gap: 12, cursor: "pointer" }} onClick={() => setExpandedId(isExpanded ? null : ex.id)}>
+            <div key={ex.id} style={{ borderBottom: "1px solid #2A2825" }}>
+              <div className="ex-row" style={{ display: "flex", alignItems: "center", padding: "12px 16px", background: exState.done ? "#201F1C" : "transparent", gap: 12, cursor: "pointer" }} onClick={() => setExpandedId(isExpanded ? null : ex.id)}>
                 <div className="circle-btn" onClick={(e) => { e.stopPropagation(); markAllDone(activeTab, ex.id); }}
-                  style={{ width: 28, height: 28, borderRadius: "50%", border: `2px solid ${exState.done ? color : "#2e2e2e"}`, background: exState.done ? color : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.2s" }}>
-                  {exState.done && (<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#121214" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>)}
+                  style={{ width: 28, height: 28, borderRadius: "50%", border: `2px solid ${exState.done ? color : "#3E3A34"}`, background: exState.done ? color : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.2s" }}>
+                  {exState.done && (<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#1A1917" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>)}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 13, fontWeight: 500, color: exState.done ? "#444" : "#ddd", textDecoration: exState.done ? "line-through" : "none", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", letterSpacing: 0.3, animation: isPR ? "prFlash 0.4s ease 3" : "none" }}>{ex.name}</div>
+                  <div style={{ fontSize: 13, fontWeight: 500, color: exState.done ? "#6B655B" : "#C7C1B8", textDecoration: exState.done ? "line-through" : "none", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", letterSpacing: 0.3, animation: isPR ? "prFlash 0.4s ease 3" : "none" }}>{ex.name}</div>
                   <div style={{ display: "flex", gap: 6, marginTop: 3, alignItems: "center" }}>
                     <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 3, background: `${TYPE_COLORS[ex.type]}22`, color: TYPE_COLORS[ex.type], letterSpacing: 1, fontWeight: 500 }}>{ex.type}</span>
-                    {ex.sets && <span style={{ fontSize: 10, color: "#444" }}>{ex.sets}×{ex.reps}</span>}
-                    {!ex.sets && ex.reps && <span style={{ fontSize: 10, color: "#444" }}>{ex.reps}</span>}
+                    {ex.sets && <span style={{ fontSize: 10, color: "#6B655B" }}>{ex.sets}×{ex.reps}</span>}
+                    {!ex.sets && ex.reps && <span style={{ fontSize: 10, color: "#6B655B" }}>{ex.reps}</span>}
                     {hasPR && (<span style={{ fontSize: 11, animation: isPR ? "pulse 0.3s ease 4" : "none" }}>🏆</span>)}
-                    {exState.notes && (<span style={{ fontSize: 10, color: "#444" }}>📝</span>)}
+                    {exState.notes && (<span style={{ fontSize: 10, color: "#6B655B" }}>📝</span>)}
                   </div>
                 </div>
                 {exState.weight && (<div style={{ fontSize: 12, color: color, letterSpacing: 0.5, flexShrink: 0 }}>{exState.weight}kg</div>)}
-                <div style={{ color: "#333", transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", fontSize: 12 }}>▾</div>
+                <div style={{ color: "#5A554C", transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", fontSize: 12 }}>▾</div>
               </div>
               {isExpanded && (
-                <div style={{ padding: "0 16px 16px", background: "#0f0f0f", animation: "slideUp 0.15s ease" }}>
+                <div style={{ padding: "0 16px 16px", background: "#1D1C19", animation: "slideUp 0.15s ease" }}>
                   <div style={{ padding: "8px 0 14px", display: "flex", justifyContent: "center" }}>
                     <div style={{ width: "100%", maxWidth: 320, aspectRatio: "1", borderRadius: 12, overflow: "hidden", border: `1px solid ${color}33`, background: "#fff" }}>
                       <img
@@ -365,28 +365,28 @@ function GymTracker() {
                     <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
                       {Array.from({ length: setsCount }).map((_, i) => (
                         <button key={i} className="set-btn" onClick={() => toggleSet(activeTab, ex.id, i)}
-                          style={{ padding: "8px 0", width: 52, borderRadius: 8, fontSize: 11, fontFamily: "inherit", letterSpacing: 1, background: exState.sets[i] ? color : "#1a1a1a", color: exState.sets[i] ? "#121214" : "#555", border: `1px solid ${exState.sets[i] ? color : "#252525"}` }}>S{i + 1}</button>
+                          style={{ padding: "8px 0", width: 52, borderRadius: 8, fontSize: 11, fontFamily: "inherit", letterSpacing: 1, background: exState.sets[i] ? color : "#262420", color: exState.sets[i] ? "#1A1917" : "#7A7468", border: `1px solid ${exState.sets[i] ? color : "#3A3733"}` }}>S{i + 1}</button>
                       ))}
                     </div>
                   )}
                   {ex.type === "STR" && (
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <span style={{ fontSize: 10, color: "#444", letterSpacing: 1 }}>WEIGHT</span>
+                      <span style={{ fontSize: 10, color: "#6B655B", letterSpacing: 1 }}>WEIGHT</span>
                       <input type="number" inputMode="decimal" placeholder="0" value={exState.weight} onChange={(e) => updateWeight(activeTab, ex.id, e.target.value)} onClick={(e) => e.stopPropagation()}
-                        style={{ background: "#1a1a1a", border: `1px solid ${isPR ? color : "#252525"}`, borderRadius: 8, padding: "8px 12px", color: color, fontSize: 14, fontFamily: "inherit", width: 90, outline: "none", transition: "border 0.2s" }} />
-                      <span style={{ fontSize: 11, color: "#444" }}>kg</span>
+                        style={{ background: "#262420", border: `1px solid ${isPR ? color : "#3A3733"}`, borderRadius: 8, padding: "8px 12px", color: color, fontSize: 14, fontFamily: "inherit", width: 90, outline: "none", transition: "border 0.2s" }} />
+                      <span style={{ fontSize: 11, color: "#6B655B" }}>kg</span>
                       {prs[ex.id] > 0 && (
-                        <span style={{ fontSize: 10, color: "#444", marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
+                        <span style={{ fontSize: 10, color: "#6B655B", marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
                           PR: {prs[ex.id]}kg
-                          <span onClick={(e) => { e.stopPropagation(); clearPR(ex.id); }} style={{ color: "#663333", textDecoration: "underline", cursor: "pointer" }}>CLEAR</span>
+                          <span onClick={(e) => { e.stopPropagation(); clearPR(ex.id); }} style={{ color: "#9C6B5C", textDecoration: "underline", cursor: "pointer" }}>CLEAR</span>
                         </span>
                       )}
                     </div>
                   )}
                   <div style={{ marginTop: 12 }}>
-                    <div style={{ fontSize: 10, color: "#444", letterSpacing: 1, marginBottom: 6 }}>NOTES</div>
+                    <div style={{ fontSize: 10, color: "#6B655B", letterSpacing: 1, marginBottom: 6 }}>NOTES</div>
                     <textarea placeholder="e.g. felt heavy, switch grip next time..." value={exState.notes} onChange={(e) => updateNotes(activeTab, ex.id, e.target.value)} onClick={(e) => e.stopPropagation()} rows={2}
-                      style={{ width: "100%", background: "#1a1a1a", border: "1px solid #252525", borderRadius: 8, padding: "8px 10px", color: "#bbb", fontSize: 12, fontFamily: "inherit", outline: "none", resize: "vertical", lineHeight: 1.4 }} />
+                      style={{ width: "100%", background: "#262420", border: "1px solid #3A3733", borderRadius: 8, padding: "8px 10px", color: "#B0AA9F", fontSize: 12, fontFamily: "inherit", outline: "none", resize: "vertical", lineHeight: 1.4 }} />
                   </div>
                 </div>
               )}
@@ -399,15 +399,15 @@ function GymTracker() {
         <div style={{ position: "fixed", inset: 0, background: "rgba(13,13,13,0.97)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", zIndex: 100, animation: "fadeIn 0.3s ease" }}>
           <div style={{ fontSize: 72, marginBottom: 16, animation: "pulse 1s ease infinite" }}>🔥</div>
           <div style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 800, fontSize: 34, color: color, letterSpacing: 1, textAlign: "center" }}>SESSION<br/>DONE</div>
-          <div style={{ color: "#444", fontSize: 12, letterSpacing: 2, marginTop: 12 }}>{DAYS[activeTab].label} — {DAYS[activeTab].subtitle}</div>
-          <button onClick={() => setSessionDone(false)} style={{ marginTop: 40, background: color, border: "none", borderRadius: 12, padding: "14px 40px", color: "#121214", fontSize: 13, fontFamily: "inherit", fontWeight: 700, letterSpacing: 1, cursor: "pointer" }}>CLOSE</button>
+          <div style={{ color: "#6B655B", fontSize: 12, letterSpacing: 2, marginTop: 12 }}>{DAYS[activeTab].label} — {DAYS[activeTab].subtitle}</div>
+          <button onClick={() => setSessionDone(false)} style={{ marginTop: 40, background: color, border: "none", borderRadius: 12, padding: "14px 40px", color: "#1A1917", fontSize: 13, fontFamily: "inherit", fontWeight: 700, letterSpacing: 1, cursor: "pointer" }}>CLOSE</button>
         </div>
       )}
 
       {!bannerDismissed && (
-        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#141414", borderTop: "1px solid #1e1e1e", padding: "10px 16px", paddingBottom: "max(10px, env(safe-area-inset-bottom))", display: "flex", alignItems: "center", gap: 10, zIndex: 50, animation: "slideUp 0.3s ease" }}>
-          <span style={{ fontSize: 11, color: "#555", flex: 1, letterSpacing: 0.3 }}>📱 Share ↑ → Add to Home Screen</span>
-          <button onClick={dismissBanner} style={{ background: "transparent", border: "none", color: "#444", fontSize: 18, cursor: "pointer", padding: "0 4px", lineHeight: 1 }}>×</button>
+        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#211F1C", borderTop: "1px solid #322F2A", padding: "10px 16px", paddingBottom: "max(10px, env(safe-area-inset-bottom))", display: "flex", alignItems: "center", gap: 10, zIndex: 50, animation: "slideUp 0.3s ease" }}>
+          <span style={{ fontSize: 11, color: "#7A7468", flex: 1, letterSpacing: 0.3 }}>📱 Share ↑ → Add to Home Screen</span>
+          <button onClick={dismissBanner} style={{ background: "transparent", border: "none", color: "#6B655B", fontSize: 18, cursor: "pointer", padding: "0 4px", lineHeight: 1 }}>×</button>
         </div>
       )}
     </div>
