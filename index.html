@@ -6,15 +6,15 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <meta name="apple-mobile-web-app-title" content="IRON LOG" />
-<meta name="theme-color" content="#0d0d0d" />
+<meta name="theme-color" content="#121214" />
 <title>IRON LOG</title>
 <link rel="manifest" href="/manifest.json" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="icon" href="/apple-touch-icon.png" />
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html, body { background: #0d0d0d; overscroll-behavior: none; }
+  html, body { background: #121214; overscroll-behavior: none; }
   #root { min-height: 100vh; min-height: 100dvh; }
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: #111; }
@@ -42,7 +42,7 @@ const { useState, useEffect, useCallback } = React;
 
 const DAYS = {
   A: {
-    label: "Day 1", short: "Push", subtitle: "Push — Chest, Shoulders, Triceps", color: "#00e5ff",
+    label: "Day 1", short: "Push", subtitle: "Push — Chest, Shoulders, Triceps", color: "#5AC8DE",
     exercises: [
       { id: "p1", name: "Flat Bench Press", type: "STR", sets: 4, reps: "8–12" },
       { id: "p2", name: "Incline Dumbbell Press", type: "STR", sets: 3, reps: "10–12" },
@@ -54,7 +54,7 @@ const DAYS = {
     ],
   },
   B: {
-    label: "Day 2", short: "Pull", subtitle: "Pull — Back, Biceps, Rear Delts", color: "#69ff47",
+    label: "Day 2", short: "Pull", subtitle: "Pull — Back, Biceps, Rear Delts", color: "#6FCF7C",
     exercises: [
       { id: "u1", name: "Lat Pulldown", type: "STR", sets: 4, reps: "6–10" },
       { id: "u2", name: "Seated Cable Row", type: "STR", sets: 4, reps: "8–12" },
@@ -66,7 +66,7 @@ const DAYS = {
     ],
   },
   C: {
-    label: "Day 3", short: "Legs", subtitle: "Legs", color: "#ff4757",
+    label: "Day 3", short: "Legs", subtitle: "Legs", color: "#E8636B",
     exercises: [
       { id: "l1", name: "Barbell Squat", type: "STR", sets: 4, reps: "8–12" },
       { id: "l2", name: "Romanian Deadlifts", type: "STR", sets: 4, reps: "10–12" },
@@ -276,7 +276,7 @@ function GymTracker() {
   function dismissBanner() { setBannerDismissed(true); save(sessionState, prs, true); }
 
   if (!loaded) return (
-    <div style={{ background: "#0d0d0d", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ background: "#121214", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ color: "#555", fontFamily: "monospace", fontSize: 14 }}>Loading...</div>
     </div>
   );
@@ -285,11 +285,11 @@ function GymTracker() {
   const progressPct = total > 0 ? (done / total) * 100 : 0;
 
   return (
-    <div style={{ background: "#0d0d0d", minHeight: "100vh", fontFamily: "'DM Mono', 'Courier New', monospace", color: "#e0e0e0", position: "relative", paddingBottom: bannerDismissed ? 16 : 72 }}>
+    <div style={{ background: "#121214", minHeight: "100vh", fontFamily: "'JetBrains Mono', 'Courier New', monospace", color: "#e0e0e0", position: "relative", paddingBottom: bannerDismissed ? 16 : 72 }}>
       <div style={{ padding: "20px 16px 0", borderBottom: "1px solid #1e1e1e", paddingTop: "max(20px, env(safe-area-inset-top))" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
           <div>
-            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, letterSpacing: 3, color: color, lineHeight: 1 }}>IRON LOG</div>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 800, fontSize: 24, letterSpacing: 0.5, color: color, lineHeight: 1 }}>IRON LOG</div>
             <div style={{ fontSize: 10, color: "#444", letterSpacing: 2, marginTop: 2 }}>
               {new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "short" }).toUpperCase()}
             </div>
@@ -299,8 +299,8 @@ function GymTracker() {
         <div style={{ display: "flex", gap: 4 }}>
           {Object.entries(DAYS).map(([key, day]) => (
             <button key={key} className="tab-btn" onClick={() => { setActiveTab(key); setSessionDone(false); setExpandedId(null); }}
-              style={{ flex: 1, padding: "10px 4px", borderRadius: "8px 8px 0 0", color: activeTab === key ? "#0d0d0d" : "#444", background: activeTab === key ? day.color : "#141414", fontFamily: "inherit", fontSize: 11, fontWeight: 500, letterSpacing: 1, borderBottom: activeTab === key ? `2px solid ${day.color}` : "2px solid #1e1e1e" }}>
-              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 16, letterSpacing: 2 }}>{day.label}</div>
+              style={{ flex: 1, padding: "10px 4px", borderRadius: "8px 8px 0 0", color: activeTab === key ? "#121214" : "#444", background: activeTab === key ? day.color : "#141414", fontFamily: "inherit", fontSize: 11, fontWeight: 500, letterSpacing: 1, borderBottom: activeTab === key ? `2px solid ${day.color}` : "2px solid #1e1e1e" }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, fontSize: 13, letterSpacing: 0.5 }}>{day.label}</div>
               <div style={{ fontSize: 10, opacity: 0.85, marginTop: 1 }}>{day.short}</div>
             </button>
           ))}
@@ -317,7 +317,7 @@ function GymTracker() {
           <span style={{ fontSize: 10, color: color, letterSpacing: 1 }}>{done}/{total}</span>
         </div>
         <div style={{ height: 3, background: "#1e1e1e", borderRadius: 2, overflow: "hidden" }}>
-          <div style={{ height: "100%", width: `${progressPct}%`, background: color, borderRadius: 2, transition: "width 0.4s cubic-bezier(0.4,0,0.2,1)", boxShadow: `0 0 8px ${color}88` }} />
+          <div style={{ height: "100%", width: `${progressPct}%`, background: color, borderRadius: 2, transition: "width 0.4s cubic-bezier(0.4,0,0.2,1)" }} />
         </div>
       </div>
 
@@ -332,8 +332,8 @@ function GymTracker() {
             <div key={ex.id} style={{ borderBottom: "1px solid #161616" }}>
               <div className="ex-row" style={{ display: "flex", alignItems: "center", padding: "12px 16px", background: exState.done ? "#111" : "transparent", gap: 12, cursor: "pointer" }} onClick={() => setExpandedId(isExpanded ? null : ex.id)}>
                 <div className="circle-btn" onClick={(e) => { e.stopPropagation(); markAllDone(activeTab, ex.id); }}
-                  style={{ width: 28, height: 28, borderRadius: "50%", border: `2px solid ${exState.done ? color : "#2e2e2e"}`, background: exState.done ? color : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: exState.done ? `0 0 10px ${color}66` : "none", transition: "all 0.2s" }}>
-                  {exState.done && (<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#0d0d0d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>)}
+                  style={{ width: 28, height: 28, borderRadius: "50%", border: `2px solid ${exState.done ? color : "#2e2e2e"}`, background: exState.done ? color : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.2s" }}>
+                  {exState.done && (<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#121214" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>)}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 13, fontWeight: 500, color: exState.done ? "#444" : "#ddd", textDecoration: exState.done ? "line-through" : "none", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", letterSpacing: 0.3, animation: isPR ? "prFlash 0.4s ease 3" : "none" }}>{ex.name}</div>
@@ -365,7 +365,7 @@ function GymTracker() {
                     <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
                       {Array.from({ length: setsCount }).map((_, i) => (
                         <button key={i} className="set-btn" onClick={() => toggleSet(activeTab, ex.id, i)}
-                          style={{ padding: "8px 0", width: 52, borderRadius: 8, fontSize: 11, fontFamily: "inherit", letterSpacing: 1, background: exState.sets[i] ? color : "#1a1a1a", color: exState.sets[i] ? "#0d0d0d" : "#555", border: `1px solid ${exState.sets[i] ? color : "#252525"}`, boxShadow: exState.sets[i] ? `0 0 8px ${color}44` : "none" }}>S{i + 1}</button>
+                          style={{ padding: "8px 0", width: 52, borderRadius: 8, fontSize: 11, fontFamily: "inherit", letterSpacing: 1, background: exState.sets[i] ? color : "#1a1a1a", color: exState.sets[i] ? "#121214" : "#555", border: `1px solid ${exState.sets[i] ? color : "#252525"}` }}>S{i + 1}</button>
                       ))}
                     </div>
                   )}
@@ -373,7 +373,7 @@ function GymTracker() {
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <span style={{ fontSize: 10, color: "#444", letterSpacing: 1 }}>WEIGHT</span>
                       <input type="number" inputMode="decimal" placeholder="0" value={exState.weight} onChange={(e) => updateWeight(activeTab, ex.id, e.target.value)} onClick={(e) => e.stopPropagation()}
-                        style={{ background: "#1a1a1a", border: `1px solid ${isPR ? color : "#252525"}`, borderRadius: 8, padding: "8px 12px", color: color, fontSize: 14, fontFamily: "inherit", width: 90, outline: "none", boxShadow: isPR ? `0 0 10px ${color}44` : "none", transition: "border 0.2s, box-shadow 0.2s" }} />
+                        style={{ background: "#1a1a1a", border: `1px solid ${isPR ? color : "#252525"}`, borderRadius: 8, padding: "8px 12px", color: color, fontSize: 14, fontFamily: "inherit", width: 90, outline: "none", transition: "border 0.2s" }} />
                       <span style={{ fontSize: 11, color: "#444" }}>kg</span>
                       {prs[ex.id] > 0 && (
                         <span style={{ fontSize: 10, color: "#444", marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
@@ -398,9 +398,9 @@ function GymTracker() {
       {sessionDone && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(13,13,13,0.97)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", zIndex: 100, animation: "fadeIn 0.3s ease" }}>
           <div style={{ fontSize: 72, marginBottom: 16, animation: "pulse 1s ease infinite" }}>🔥</div>
-          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 42, color: color, letterSpacing: 6, textAlign: "center", textShadow: `0 0 30px ${color}88` }}>SESSION<br/>DONE</div>
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 800, fontSize: 34, color: color, letterSpacing: 1, textAlign: "center" }}>SESSION<br/>DONE</div>
           <div style={{ color: "#444", fontSize: 12, letterSpacing: 2, marginTop: 12 }}>{DAYS[activeTab].label} — {DAYS[activeTab].subtitle}</div>
-          <button onClick={() => setSessionDone(false)} style={{ marginTop: 40, background: color, border: "none", borderRadius: 12, padding: "14px 40px", color: "#0d0d0d", fontSize: 13, fontFamily: "inherit", fontWeight: 500, letterSpacing: 2, cursor: "pointer", boxShadow: `0 0 20px ${color}66` }}>CLOSE</button>
+          <button onClick={() => setSessionDone(false)} style={{ marginTop: 40, background: color, border: "none", borderRadius: 12, padding: "14px 40px", color: "#121214", fontSize: 13, fontFamily: "inherit", fontWeight: 700, letterSpacing: 1, cursor: "pointer" }}>CLOSE</button>
         </div>
       )}
 
