@@ -51,6 +51,7 @@ const DAYS = {
       { id: "p4", name: "Lateral Raises", type: "STR", sets: 3, reps: "12–15" },
       { id: "p5", name: "Tricep Pushdown", type: "STR", sets: 3, reps: "12–15" },
       { id: "p6", name: "Overhead Tricep Extension", type: "STR", sets: 3, reps: "10–12" },
+      { id: "pc", name: "Hanging Leg Raise", type: "CORE", sets: 3, reps: "10–15" },
       { id: "p7", name: "Incline Treadmill Walk", type: "CARDIO", sets: null, reps: "20 min" },
     ],
   },
@@ -64,6 +65,7 @@ const DAYS = {
       { id: "u4", name: "Face Pulls", type: "STR", sets: 3, reps: "12–15" },
       { id: "u5", name: "Barbell Curl", type: "STR", sets: 3, reps: "10–12" },
       { id: "u6", name: "Hammer Curls", type: "STR", sets: 3, reps: "10–12" },
+      { id: "uc", name: "Cable Woodchopper", type: "CORE", sets: 3, reps: "12/side", weighted: true },
       { id: "u7", name: "Cycling", type: "CARDIO", sets: null, reps: "12–15 min" },
     ],
   },
@@ -77,12 +79,13 @@ const DAYS = {
       { id: "l4", name: "Leg Curls", type: "STR", sets: 3, reps: "10–12" },
       { id: "l5", name: "Walking Lunges", type: "STR", sets: 3, reps: "12/leg" },
       { id: "l6", name: "Calf Raises", type: "STR", sets: 4, reps: "15–20" },
+      { id: "lc", name: "Plank", type: "CORE", sets: 3, reps: "30–45s" },
       { id: "l7", name: "Normal Walking", type: "CARDIO", sets: null, reps: "5 min" },
     ],
   },
 };
 
-const TYPE_COLORS = { WU: "#D9A441", STR: "#a78bfa", CARDIO: "#34d399" };
+const TYPE_COLORS = { WU: "#D9A441", STR: "#a78bfa", CORE: "#D9899B", CARDIO: "#34d399" };
 const STORAGE_KEY = "gymlog_v5";
 const DEFAULT_TAB = "A";
 
@@ -374,7 +377,7 @@ function GymTracker() {
                       ))}
                     </div>
                   )}
-                  {ex.type === "STR" && (
+                  {(ex.type === "STR" || ex.weighted) && (
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <span style={{ fontSize: 10, color: "#6B655B", letterSpacing: 1 }}>WEIGHT</span>
                       <input type="number" inputMode="decimal" placeholder="0" value={exState.weight} onChange={(e) => updateWeight(activeTab, ex.id, e.target.value)} onClick={(e) => e.stopPropagation()}
