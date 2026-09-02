@@ -291,9 +291,9 @@ function GymTracker() {
   const progressPct = total > 0 ? (done / total) * 100 : 0;
 
   return (
-    <div style={{ background: "#1A1917", minHeight: "100vh", fontFamily: "'JetBrains Mono', 'Courier New', monospace", color: "#C7C1B8", position: "relative", paddingBottom: bannerDismissed ? 16 : 72 }}>
-      <div style={{ padding: "20px 16px 0", borderBottom: "1px solid #322F2A", paddingTop: "max(20px, env(safe-area-inset-top))" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+    <div style={{ background: "#1A1917", minHeight: "100vh", fontFamily: "'JetBrains Mono', 'Courier New', monospace", color: "#C7C1B8", position: "relative", paddingBottom: bannerDismissed ? "calc(84px + env(safe-area-inset-bottom))" : "calc(132px + env(safe-area-inset-bottom))" }}>
+      <div style={{ padding: "20px 16px 16px", borderBottom: "1px solid #322F2A", paddingTop: "max(20px, env(safe-area-inset-top))" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
           <div>
             <div style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 800, fontSize: 24, letterSpacing: 0.5, color: color, lineHeight: 1 }}>IRON LOG</div>
             <div style={{ fontSize: 10, color: "#6B655B", letterSpacing: 2, marginTop: 2 }}>
@@ -301,15 +301,6 @@ function GymTracker() {
             </div>
           </div>
           <button onClick={resetDay} style={{ background: "transparent", border: "1px solid #3A3733", color: "#7A7468", borderRadius: 6, padding: "6px 12px", fontSize: 11, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>RESET DAY</button>
-        </div>
-        <div style={{ display: "flex", gap: 4 }}>
-          {Object.entries(DAYS).map(([key, day]) => (
-            <button key={key} className="tab-btn" onClick={() => { setActiveTab(key); setSessionDone(false); setExpandedId(null); }}
-              style={{ flex: 1, padding: "10px 4px", borderRadius: "8px 8px 0 0", color: activeTab === key ? "#1A1917" : "#6B655B", background: activeTab === key ? day.color : "#211F1C", fontFamily: "inherit", fontSize: 11, fontWeight: 500, letterSpacing: 1, borderBottom: activeTab === key ? `2px solid ${day.color}` : "2px solid #322F2A" }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, fontSize: 13, letterSpacing: 0.5 }}>{day.label}</div>
-              <div style={{ fontSize: 10, opacity: 0.85, marginTop: 1 }}>{day.short}</div>
-            </button>
-          ))}
         </div>
       </div>
 
@@ -412,12 +403,23 @@ function GymTracker() {
         </div>
       )}
 
-      {!bannerDismissed && (
-        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#211F1C", borderTop: "1px solid #322F2A", padding: "10px 16px", paddingBottom: "max(10px, env(safe-area-inset-bottom))", display: "flex", alignItems: "center", gap: 10, zIndex: 50, animation: "slideUp 0.3s ease" }}>
-          <span style={{ fontSize: 11, color: "#7A7468", flex: 1, letterSpacing: 0.3 }}>📱 Share ↑ → Add to Home Screen</span>
-          <button onClick={dismissBanner} style={{ background: "transparent", border: "none", color: "#6B655B", fontSize: 18, cursor: "pointer", padding: "0 4px", lineHeight: 1 }}>×</button>
+      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 60 }}>
+        {!bannerDismissed && (
+          <div style={{ background: "#211F1C", borderTop: "1px solid #322F2A", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, animation: "slideUp 0.3s ease" }}>
+            <span style={{ fontSize: 11, color: "#7A7468", flex: 1, letterSpacing: 0.3 }}>📱 Share ↑ → Add to Home Screen</span>
+            <button onClick={dismissBanner} style={{ background: "transparent", border: "none", color: "#6B655B", fontSize: 18, cursor: "pointer", padding: "0 4px", lineHeight: 1 }}>×</button>
+          </div>
+        )}
+        <div style={{ background: "#1A1917", borderTop: "1px solid #322F2A", display: "flex", gap: 6, padding: "8px 8px 0", paddingBottom: "max(8px, env(safe-area-inset-bottom))" }}>
+          {Object.entries(DAYS).map(([key, day]) => (
+            <button key={key} className="tab-btn" onClick={() => { setActiveTab(key); setSessionDone(false); setExpandedId(null); }}
+              style={{ flex: 1, padding: "9px 4px", borderRadius: 10, color: activeTab === key ? "#1A1917" : "#6B655B", background: activeTab === key ? day.color : "#211F1C", fontFamily: "inherit", fontSize: 11, fontWeight: 500, letterSpacing: 1 }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, fontSize: 13, letterSpacing: 0.5 }}>{day.label}</div>
+              <div style={{ fontSize: 10, opacity: 0.85, marginTop: 1 }}>{day.short}</div>
+            </button>
+          ))}
         </div>
-      )}
+      </div>
     </div>
   );
 }
